@@ -79,12 +79,15 @@ See the [echoecho README][ee-readme] for more details.
 
 #### Timeouts
 
-Yeti will disconnect a browser if it does not record any activity from it for 45 seconds.
+Yeti will move on to the next test if a test takes longer than 5 minutes (300 seconds).
 You can adjust this interval with the `--timeout` option.
 
 This will run Yeti with a 120 second timeout:
 
     $ yeti --timeout 120 test.html
+
+There isn't a general timeout setting. Yeti actively pings browsers about every
+2-5 seconds and disconnects them if they fail to respond to a ping three times.
 
 #### Query string parameters
 
@@ -164,13 +167,13 @@ This makes it really simple to setup an ad-hoc testing lab shared with your team
 
 #### Browser launching
 
-You can specify `wd-host`, `wd-port`, `wd-user`, and `wd-pass` options to connect Yeti to a Selenium 2 Hub
+You can specify the `wd-hub` option to connect Yeti to a Selenium 2 Hub
 using the WebDriver protocol. Specifying one or more `browser` options will cause Yeti to launch the
 given browsers over WebDriver.
 
 For example, you can start a Yeti Hub like this:
 
-    yeti --server --wd-hub selenium.example.com --wd-port 4444
+    yeti --server --wd-url http://selenium.example.com:4444
 
 Then run tests on two Chrome browsers like this:
 
@@ -208,10 +211,7 @@ Here's a breakdown of all available CLI options.
  - *loglevel* (`debug` or `info`) Print debugging information.
  - *browser* (String) Browser to launch with WebDriver.
    Requires a Hub with a `wd-host` and `wd-port` configured.
- - *wd-host* (String) Hostname of a WebDriver server for launching browsers.
- - *wd-port* (Number) Port to connect on `wd-host`.
- - *wd-user* (String) Username for WebDriver server.
- - *wd-pass* (String) Password for WebDriver server.
+ - *wd-url* (URL) WebDriver Hub URL. May contain a username and password.
  - *help* Print usage.
  - *version* Print the Yeti version.
 
